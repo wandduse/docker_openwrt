@@ -1,0 +1,33 @@
+name: up OpenWrt Docker x86-64-lede-8011
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    
+env:
+  FIRMWARE_URL: "https://github.com/Banwan1212/openwrt-docker/releases/download/v0.1.2/openwrt-x86-64-generic-rootfs.tar.gz"
+  REPOSITORY: wanuse/openwrt-x86-64
+  TAG: v5
+
+jobs:
+  build:
+    name: "Build OpenWrt docker image"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Download Firmware
+        run: |
+          wget $FIRMWARE_URL -O op.tar.gz
+
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@main
+        env:
+          FIRMWARE: openwrt.tar.gz
+        with:
+          name: ${{ env.REPOSITORY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          buildargs: FIRMWARE
+          tags: "latest,${{ env.TAG }}"
