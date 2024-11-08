@@ -1,5 +1,5 @@
 
-name: openwrt_dhcp_ddd
+name: openwrt_docker
 on:
   #schedule:
     #- cron: '0 6 * * *'
